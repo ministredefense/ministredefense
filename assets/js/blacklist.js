@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         card.innerHTML = `
             <div class="card-nickname">${escapeHtml(item.nickname)}</div>
-            <div class="card-id">ID: ${escapeHtml(item.accountId)}</div>
+            <div class="card-id">Номер аккаунта: ${escapeHtml(item.accountId)}</div>
             <div class="card-date">Попал: ${dateIn}</div>
             <div class="card-date">Выход: ${dateOut}</div>
             <div class="card-reason">${escapeHtml(item.reason)}</div>
