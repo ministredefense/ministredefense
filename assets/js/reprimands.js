@@ -64,7 +64,7 @@ function createCard(item) {
     card.innerHTML = `
         <div class="card-nickname">${escapeHtml(item.nickname)}</div>
         <div class="card-base">База: <strong>${escapeHtml(fullBase)}</strong></div>
-        <div class="card-id">ID: ${escapeHtml(item.accountId)}</div>
+        <div class="card-id">Номер аккаунта: ${escapeHtml(item.accountId)}</div>
         <div class="card-count" style="margin-top: 8px;">
             <span style="color: ${badgeColor}; font-weight: 600;">
                 Выговоров: ${count}
