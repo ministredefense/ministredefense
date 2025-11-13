@@ -1,0 +1,118 @@
+const API_URL = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=senior';
+
+document.addEventListener("DOMContentLoaded", () => {
+    const list = document.getElementById("seniorList");
+    const loader = document.getElementById("loader");
+    const modal = document.getElementById("infoModal");
+    const modalClose = document.getElementById("modalClose");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+
+    const themeSlider = document.getElementById('themeSlider');
+    function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeSlider.checked = (theme === 'dark');
+    }
+    setTheme(localStorage.getItem('theme') || 'light');
+    themeSlider.addEventListener('change', () => {
+        setTheme(themeSlider.checked ? 'dark' : 'light');
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", e => e.target === modal && closeModal());
+    document.addEventListener("keydown", e => e.key === "Escape" && closeModal());
+
+    async function loadData() {
+        try {
+            const res = await fetch(API_URL, { cache: "no-store" });
+            const data = await res.json();
+            hideLoader();
+            renderList(data);
+        } catch (err) {
+            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка загрузки данных</div>`;
+            console.error(err);
+        }
+    }
+
+    function renderList(data) {
+        if (!Array.isArray(data)) return;
+        list.innerHTML = "";
+
+        data.forEach(fraction => {
+            const block = document.createElement("div");
+            block.className = "fraction-block";
+
+            const title = document.createElement("div");
+            title.className = "fraction-title";
+            title.textContent = escape(fraction.fraction);
+            block.appendChild(title);
+
+            const grid = document.createElement("div");
+            grid.className = "staff-grid";
+
+            fraction.staff.forEach(member => {
+                const warnsCount = (member.warns || []).length;
+                const warnClass = warnsCount === 0 ? "warn-count zero" : "warn-count";
+
+                const card = document.createElement("div");
+                card.className = "staff-card";
+
+                card.innerHTML = `
+                    <div class="staff-nickname">${escape(member.nickname)}</div>
+                    <div class="${warnClass}">${warnsCount}</div>
+                    <a href="${member.vk || '#'}" class="vk-link" target="_blank" onclick="event.stopPropagation()">
+                        <img class="vk-icon light" src="assets/icons/vk-light.png" alt="VK">
+                        <img class="vk-icon dark" src="assets/icons/vk-dark.png" alt="VK">
+                    </a>
+                `;
+
+                card.addEventListener("click", () => openModal(member));
+                grid.appendChild(card);
+            });
+
+            block.appendChild(grid);
+            list.appendChild(block);
+        });
+    }
+
+    function openModal(member) {
+        modalTitle.textContent = member.nickname;
+
+        const warns = member.warns || [];
+        const warnsHTML = warns.length === 0
+            ? '<div class="warn-no-warns">Выговоров нет</div>'
+            : warns.map(w => `
+                <div class="warn-item">
+                    <div class="warn-text">${escape(w.text)}</div>
+                    <div class="warn-proof">
+                        ${w.proof && w.proof.includes('<') 
+                            ? w.proof 
+                            : `<a href="${escape(w.proof)}" target="_blank">${escape(w.proof)}</a>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+
+        modalBody.innerHTML = `
+            <strong style="display:block; margin:20px 0 12px; font-size:15px; color:var(--color-primary);">Выговоры:</strong>
+            ${warnsHTML}
+        `;
+        modal.classList.add("active");
+    }
+
+    function closeModal() {
+        modal.classList.remove("active");
+    }
+
+    function hideLoader() {
+        loader.style.display = "none";
+    }
+
+    function escape(s) {
+        if (!s) return "—";
+        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    loadData();
+});

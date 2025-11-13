@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+</head>
+<body data-theme="light">
+
+    <div class="loader" id="loader"><div class="spinner"></div></div>
+
+    <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header"><h3>Меню</h3></div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Поиск разделов..." autocomplete="off">
+            <span class="search-icon">search</span>
+        </div>
+        <ul class="sidebar-menu" id="menuList">
+            <li data-title="Главная страница"><a href="index.html">Главная страница</a></li>
+            <li data-title="Следящие и министр"><a href="main.html">Важные лица</a></li>
+            <li data-title="Лидеры"><a href="leaders.html">Лидеры</a></li>
+            <li data-title="Старший состав"><a href="senior.html">Старший состав</a></li>
+            <li data-title="Система баллов"><a href="exchange.html">Система баллов</a></li>
+            <li data-title="Обмен баллов"><a href="points.html">Обмен баллов</a></li>
+            <li data-title="Проверки"><a href="database.html">Проверки военных баз</a></li>
+            <li data-title="Экзамены и контракты"><a href="exams.html">Экзамены и контракты</a></li>
+            <li data-title="Выговоры"><a href="reprimands.html">Выговоры</a></li>
+            <li data-title="Черный список"><a href="blacklist.html">Черный список</a></li>
+            <li data-title="География баз"><a href="geography.html">География баз</a></li>
+            <li data-title="Игра"><a href="game.html">Игра</a></li>
+        </ul>
+        <div class="no-results" id="noResults">Ничего не найдено</div>
+    </nav>
+
+    <div class="overlay" id="overlay"></div>
+
+    <label class="switch" title="Тёмная/Светлая тема">
+        <input type="checkbox" id="themeSlider" />
+        <span class="slider round"></span>
+    </label>
+
+    <header>
+        <h1>Министерство обороны штата Platinum</h1>
+    </header>
+
+    <section class="about-section">
+        <div class="about-card">
+            <h2>Добро пожаловать</h2>
+            <p class="intro-text">
+                Это не просто сайт — это <strong>лучшее что может быть для</strong> военных штата Platinum. 
+                Здесь вы найдёте всё: от географии и лидеров до балловой системы и проверок. 
+                <br><br>
+                Используйте <strong>меню</strong> для быстрого доступа, <strong>тёмную тему</strong> для комфорта.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-user-tie"></i>
+                    <p>Информация о лидерах, старшем составе</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-medal"></i>
+                    <p>Балловая система для бойцов и лидеров</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>Проверки от министра</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Система выговоров и черный список</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>География баз, игра для военных (в разработке)</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <p>Адаптивный дизайн и светлая/тёмная тема</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--
+     <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" data-target="3">0</div>
+                <p>чота там первое</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="892">0</div>
+                <p>чота там второе</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="124">0</div>
+                <p>чота там третье</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="18">0</div>
+                <p>чота там четверьтое</p>
+            </div>
+        </div>
+    </section>
+    -->
+
+    <section class="gallery-section">
+        <div class="gallery-card">
+            <h2>Галерея</h2>
+            <div class="gallery-container">
+                <div class="gallery-slider">
+                    <div class="gallery-slides" id="slides">
+                        <div class="gallery-slide">
+                            <img src="assets/images/gallery/picture1.jpg" alt="#1" onclick="openZoom(this, 0)">
+                            <div class="photo-caption">#1</div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="assets/images/gallery/picture2.jpg" alt="#2" onclick="openZoom(this, 1)">
+                            <div class="photo-caption">#2</div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="assets/images/gallery/picture3.jpg" alt="#3" onclick="openZoom(this, 2)">
+                            <div class="photo-caption">#3</div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="assets/images/gallery/picture4.jpg" alt="#4" onclick="openZoom(this, 3)">
+                            <div class="photo-caption">#4</div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="assets/images/gallery/picture5.jpg" alt="#5" onclick="openZoom(this, 4)">
+                            <div class="photo-caption">#5</div>
+                        </div>
+                        <div class="gallery-slide">
+                            <img src="assets/images/gallery/picture6.jpg" alt="#6" onclick="openZoom(this, 5)">
+                            <div class="photo-caption">#6</div>
+                        </div>
+                    </div>
+                    <div class="zoom-nav zoom-prev" onclick="prevSlide()">chevron_left</div>
+                    <div class="zoom-nav zoom-next" onclick="nextSlide()">chevron_right</div>
+                </div>
+                <div class="gallery-dots" id="dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="zoom-modal" id="zoomModal">
+        <div class="zoom-container">
+            <div class="modal-close" onclick="closeZoom()"></div>
+            <div class="zoom-nav zoom-prev" onclick="zoomPrev()">chevron_left</div>
+            <div class="zoom-nav zoom-next" onclick="zoomNext()">chevron_right</div>
+            <img class="zoom-img" id="zoomImg" src="" alt="">
+            <div class="zoom-controls">
+                <div class="zoom-btn" onclick="zoomIn()">add</div>
+                <div class="zoom-btn" onclick="zoomOut()">remove</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+    <script src="assets/js/index.js"></script>
+</body>
+</html>

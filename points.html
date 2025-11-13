@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/points.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-theme="light">
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <a href="index.html" class="home-btn" title="На главную">
+        <img src="assets/icons/home-light.png" alt="Домой" class="home-icon light">
+        <img src="assets/icons/home-dark.png" alt="Домой" class="home-icon dark">
+    </a>
+
+    <label class="switch" title="Тёмная/Светлая тема">
+        <input type="checkbox" id="themeSlider">
+        <span class="slider round"></span>
+    </label>
+
+    <button class="action-btn top-btn" id="topBtn">
+        <span class="material-icons">military_tech</span>
+        <span class="btn-label">ТОП</span>
+    </button>
+
+    <button class="action-btn chart-btn" id="chartBtn">
+        <span class="material-icons">bar_chart</span>
+        <span class="btn-label">СТАТ</span>
+    </button>
+
+    <div class="container">
+        <h1>Баллы сотрудников</h1>
+
+        <div class="search-container search-box">
+            <input type="text" id="searchInput" placeholder="Поиск по ID или никнейму..." autocomplete="off">
+            <span class="search-icon">search</span>
+        </div>
+
+        <div class="instructions">
+            <strong>Информация:</strong><br>
+            • Система начисления баллов для Министерства Обороны, за опреденную работу.<br>
+            • Баллы выдаются или снимаются старшими по званию.<br>
+            • Имеется топ по баллам и статистка, по кнопкам в правой нижней части экрана.<br>
+            • Данные обновляются в реальном времени.
+        </div>
+
+        <div id="points"></div>
+    </div>
+
+    <div class="modal" id="topModal">
+        <div class="modal-content top-modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Статистика по игрокам</div>
+                <button class="modal-close" id="topClose"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs modal-tabs">
+                    <button class="tab-btn active" data-tab="total">Общий топ</button>
+                    <button class="tab-btn" data-tab="earned">Получено</button>
+                    <button class="tab-btn" data-tab="spent">Потрачено</button>
+                </div>
+                <div class="tab-content active" id="total"></div>
+                <div class="tab-content" id="earned"></div>
+                <div class="tab-content" id="spent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="chartModal">
+        <div class="modal-content chart-modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Статистика по базам</div>
+                <button class="modal-close" id="chartClose"></button>
+            </div>
+            <div class="modal-body">
+                <div class="base-selector">
+                    <button class="base-btn active" data-base="all">Все базы</button>
+                    <button class="base-btn" data-base="СВ">СВ</button>
+                    <button class="base-btn" data-base="ВВС">ВВС</button>
+                    <button class="base-btn" data-base="ВМФ">ВМФ</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="pointModal">
+        <div class="modal-content player-modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="pointModalTitle">Никнейм</div>
+                <button class="modal-close" id="modalClose"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalInfo">
+                    <p><strong>Номер аккаунта:</strong> <span id="modalId"></span></p>
+                    <p><strong>Всего баллов:</strong> <span id="modalCount"></span></p>
+                    <div id="nickHistory">
+                        <strong>История никнеймов:</strong>
+                        <div id="nickList"></div>
+                    </div>
+                    <div id="pointHistoryList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+    <script src="assets/js/points.js"></script>
+</body>
+</html>

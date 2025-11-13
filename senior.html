@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/senior.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+</head>
+<body data-theme="light">
+
+<div class="loader" id="loader">
+    <div class="spinner"></div>
+</div>
+
+<a href="index.html" class="home-btn" title="На главную">
+    <img src="assets/icons/home-light.png" alt="Домой" class="home-icon light">
+    <img src="assets/icons/home-dark.png" alt="Домой" class="home-icon dark">
+</a>
+
+<label class="switch" title="Тёмная/Светлая тема">
+    <input type="checkbox" id="themeSlider" />
+    <span class="slider round"></span>
+</label>
+
+<div class="container">
+    <h1>Старший состав</h1>
+
+    <div class="instructions">
+        <strong>Чуть чуть информации:</strong><br>
+        • Нажмите на карточку можно посмотреть выговоры офицеров.<br>
+        • Нажав на VK - вас отправит на страницу.<br>
+        • Данные обновляются автоматически.
+    </div>
+
+    <div id="seniorList" class="senior-list"></div>
+</div>
+
+<div class="modal" id="infoModal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle"></div>
+            <button class="modal-close" id="modalClose"></button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+<script src="assets/js/senior.js"></script>
+</body>
+</html>

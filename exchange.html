@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/exchange.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+</head>
+<body data-theme="light">
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <a href="index.html" class="home-btn" title="На главную">
+        <img src="assets/icons/home-light.png" alt="Домой (светлая тема)" class="home-icon light">
+        <img src="assets/icons/home-dark.png" alt="Домой (тёмная тема)" class="home-icon dark">
+    </a>
+
+    <h1>Жетоны: Получение и обмен</h1>
+
+    <label class="switch" title="Тёмная/Светлая тема">
+        <input type="checkbox" id="themeSlider">
+        <span class="slider round"></span>
+    </label>
+
+    <div class="instructions">
+        <strong>Маленькое описание:</strong><br>
+        • Выберите категорию ниже, жмите на то что Вам нужно.<br>
+        • <strong>Получение</strong> — за что начисляют жетоны.<br>
+        • <strong>Обмен</strong> — на что можно потратить.<br>
+        • Выберите вкладку → категорию.<br>
+        • Все "цены" указаны в <strong>жетонах</strong>.<br>
+        • Если есть идеи пишите в VK <strong>следящим</strong> и/или <strong>Министру</strong>.<br>
+    </div>
+
+    <div class="main-tabs">
+        <div class="main-tab active" data-main="earn">Получение жетонов</div>
+        <div class="main-tab" data-main="exchange">Обмен жетонов</div>
+    </div>
+
+    <div id="earn" class="main-content active">
+        <div class="sections">
+            <div class="section-btn active" data-target="regular-earn">Состав</div>
+            <div class="section-btn" data-target="officers-earn">Офицеры</div>
+            <div class="section-btn" data-target="senior-earn">Старший состав</div>
+            <div class="section-btn" data-target="leaders-earn">Лидерский состав</div>
+        </div>
+
+        <div id="regular-earn" class="content-area active">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="regular-earn-table">
+                    <thead><tr><th>Действие</th><th>Награда</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="officers-earn" class="content-area">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="officers-earn-table">
+                    <thead><tr><th>Действие</th><th>Награда</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="senior-earn" class="content-area">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="senior-earn-table">
+                    <thead><tr><th>Действие</th><th>Награда</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="leaders-earn" class="content-area">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="leaders-earn-table">
+                    <thead><tr><th>Действие</th><th>Награда</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="exchange" class="main-content">
+        <div class="sections">
+            <div class="section-btn active" data-target="regular-exchange">Состав</div>
+            <div class="section-btn" data-target="officers-exchange">Офицеры</div>
+            <div class="section-btn" data-target="senior-exchange">Старший состав</div>
+            <div class="section-btn" data-target="leaders-exchange">Лидерский состав</div>
+        </div>
+
+        <div id="regular-exchange" class="content-area active">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="regular-exchange-table">
+                    <thead><tr><th>На что обменять</th><th>Стоимость</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="officers-exchange" class="content-area">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="officers-exchange-table">
+                    <thead><tr><th>На что обменять</th><th>Стоимость</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="senior-exchange" class="content-area">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="senior-exchange-table">
+                    <thead><tr><th>На что обменять</th><th>Стоимость</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="leaders-exchange" class="content-area">
+            <div class="table-wrapper">
+                <table class="exchange-table" id="leaders-exchange-table">
+                    <thead><tr><th>На что обменять</th><th>Стоимость</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+    <script src="assets/js/exchange.js"></script>
+</body>
+</html>

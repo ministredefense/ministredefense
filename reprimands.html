@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/reprimands.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+</head>
+<body data-theme="light">
+
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <a href="index.html" class="home-btn" title="На главную">
+        <img src="assets/icons/home-light.png" alt="Домой" class="home-icon light">
+        <img src="assets/icons/home-dark.png" alt="Домой" class="home-icon dark">
+    </a>
+
+    <label class="switch" title="Тёмная/Светлая тема">
+        <input type="checkbox" id="themeSlider">
+        <span class="slider round"></span>
+    </label>
+
+    <div class="container">
+        <h1>Выговоры</h1>
+
+        <div class="instructions">
+            <strong>Информация:</strong><br>
+            • Список выговоров сотрудников Министерства Обороны.<br>
+            • Выговоры выдаются за нарушения устава и правил.<br>
+            • 3 выговора — основание для увольнения.<br>
+            • Данные обновляются автоматически.
+        </div>
+
+        <div id="reprimands" class="reprimands-grid"></div>
+    </div>
+
+    <div class="modal" id="pointModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Никнейм</div>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalInfo">
+                    <p><strong>База:</strong> <span id="modalBase"></span></p>
+                    <p><strong>Аккаунт ID:</strong> <span id="modalId"></span></p>
+                    <p><strong>Выговоров:</strong> <span id="modalCount"></span></p>
+                    <div id="modalReprimandsList" style="margin-top: 12px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+    <script src="assets/js/reprimands.js"></script>
+</body>
+</html>

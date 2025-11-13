@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/geography.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+</head>
+<body data-theme="light">
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+    <a href="index.html" class="home-btn" title="На главную">
+        <img src="assets/icons/home-light.png" alt="Домой" class="home-icon light">
+        <img src="assets/icons/home-dark.png" alt="Домой" class="home-icon dark">
+    </a>
+    <h1>География военных баз и авианосца</h1>
+    <label class="switch" title="Тёмная/Светлая тема">
+        <input type="checkbox" id="themeSlider">
+        <span class="slider round"></span>
+    </label>
+    <div class="instructions">
+        <strong>Зум и перемещение:</strong><br>
+        • <strong>Колёсико мыши</strong> — зум (центр под курсором)<br>
+        • <strong>Зажмите ЛКМ и тяните</strong> — перемещение<br>
+        • <strong>Двойной клик</strong> — сброс
+    </div>
+
+    <div class="sections">
+        <div class="section-btn" data-target="ground">Сухопутные Войска</div>
+        <div class="section-btn" data-target="air">Военно-Воздушные Силы</div>
+        <div class="section-btn" data-target="navy">Военно-Морской Флот</div>
+        <div class="section-btn" data-target="carrier">Авианосец</div>
+    </div>
+
+    <div id="dynamicContent"></div>
+
+    <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+    <script src="assets/js/geography.js"></script>
+</body>
+</html>

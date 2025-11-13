@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ministredefense</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/exams.css">
+    <link rel="icon" type="image/png" href="assets/icons/ico.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-theme="light">
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <a href="index.html" class="home-btn" title="На главную">
+        <img src="assets/icons/home-light.png" alt="Домой" class="home-icon light">
+        <img src="assets/icons/home-dark.png" alt="Домой" class="home-icon dark">
+    </a>
+
+    <label class="switch" title="Тёмная/Светлая тема">
+        <input type="checkbox" id="themeSlider">
+        <span class="slider round"></span>
+    </label>
+
+    <button class="action-btn top-btn" id="statsBtn">
+        <span class="material-icons">bar_chart</span>
+        <span class="btn-label">СТАТ</span>
+    </button>
+
+    <div class="container">
+        <h1>Экзамены сотрудников</h1>
+
+        <div class="instructions">
+            <strong>Информация:</strong><br>
+            • Система сдачи экзаменов: КМБ, БОЗ и Контракты.<br>
+            • По 300 записей на страницу. Листайте кнопками.<br>
+            • Поиск работает по всем данным.
+        </div>
+
+        <div class="controls">
+            <div class="search-container search-box">
+                <input type="text" id="searchInput" placeholder="Поиск по никнейму..." autocomplete="off">
+                <span class="search-icon">search</span>
+            </div>
+
+            <div class="type-selector">
+                <button class="type-btn active" data-type="Курс Молодого Бойца">КМБ</button>
+                <button class="type-btn" data-type="Большой Офицерский Зачёт">БОЗ</button>
+                <button class="type-btn" data-type="Контракт">Контракт</button>
+            </div>
+
+            <div class="pagination" id="pagination" style="display:none;margin:20px 0;">
+                <button id="prevPage" class="nav-btn">Влево</button>
+                <span id="pageInfo">Страница 1 из 1</span>
+                <button id="nextPage" class="nav-btn">Вправо</button>
+            </div>
+        </div>
+
+        <div id="exams"></div>
+
+        <div id="loadMore" class="load-more">Подгрузка данных...</div>
+    </div>
+
+    <div class="modal" id="statsModal">
+        <div class="modal-content stats-modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Статистика</div>
+                <button class="modal-close" id="statsClose"></button>
+            </div>
+            <div class="modal-body" id="statsBody">
+                <div class="stats-loading">
+                    <div class="spinner"></div>
+                    <p>Идёт подсчёт статистики... Пожалуйста, подождите пару секунд.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
+
+    <script src="assets/js/exams.js"></script>
+</body>
+</html>
