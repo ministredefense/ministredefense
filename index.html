@@ -33,6 +33,7 @@
             <li data-title="Обмен баллов"><a href="points.html">Обмен баллов</a></li>
             <li data-title="Проверки"><a href="database.html">Проверки военных баз</a></li>
             <li data-title="Экзамены и контракты"><a href="exams.html">Экзамены и контракты</a></li>
+            <li data-title="Статистика военных"><a href="https://djoniohanter.com/military/">Общая статистика военных</a></li>
             <li data-title="Выговоры"><a href="reprimands.html">Выговоры</a></li>
             <li data-title="Черный список"><a href="blacklist.html">Черный список</a></li>
             <li data-title="География баз"><a href="geography.html">География баз</a></li>
@@ -91,8 +92,14 @@
         </div>
     </section>
 
-    <!--
-     <section class="stats-section">
+    <section class="stats-intro">
+        <div class="intro-content">
+            <h2>Ключевые показатели</h2>
+            <p>Всё, что важно — в цифрах. Активность, достижения, структура. <br>Прозрачно. Чётко. По делу.</p>
+        </div>
+    </section>
+
+    <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-item">
                 <div class="stat-number" data-target="3">0</div>
@@ -113,58 +120,6 @@
         </div>
     </section>
 
-    <section class="gallery-section">
-        <div class="gallery-card">
-            <h2>Галерея</h2>
-            <div class="gallery-container">
-                <div class="gallery-slider">
-                    <div class="gallery-slides" id="slides">
-                        <div class="gallery-slide">
-                            <img src="assets/images/gallery/picture1.jpg" alt="#1" onclick="openZoom(this, 0)">
-                            <div class="photo-caption">#1</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="assets/images/gallery/picture2.jpg" alt="#2" onclick="openZoom(this, 1)">
-                            <div class="photo-caption">#2</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="assets/images/gallery/picture3.jpg" alt="#3" onclick="openZoom(this, 2)">
-                            <div class="photo-caption">#3</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="assets/images/gallery/picture4.jpg" alt="#4" onclick="openZoom(this, 3)">
-                            <div class="photo-caption">#4</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="assets/images/gallery/picture5.jpg" alt="#5" onclick="openZoom(this, 4)">
-                            <div class="photo-caption">#5</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <img src="assets/images/gallery/picture6.jpg" alt="#6" onclick="openZoom(this, 5)">
-                            <div class="photo-caption">#6</div>
-                        </div>
-                    </div>
-                    <div class="zoom-nav zoom-prev" onclick="prevSlide()">chevron_left</div>
-                    <div class="zoom-nav zoom-next" onclick="nextSlide()">chevron_right</div>
-                </div>
-                <div class="gallery-dots" id="dots"></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="zoom-modal" id="zoomModal">
-        <div class="zoom-container">
-            <div class="modal-close" onclick="closeZoom()"></div>
-            <div class="zoom-nav zoom-prev" onclick="zoomPrev()">chevron_left</div>
-            <div class="zoom-nav zoom-next" onclick="zoomNext()">chevron_right</div>
-            <img class="zoom-img" id="zoomImg" src="" alt="">
-            <div class="zoom-controls">
-                <div class="zoom-btn" onclick="zoomIn()">add</div>
-                <div class="zoom-btn" onclick="zoomOut()">remove</div>
-            </div>
-        </div>
-    </div>
--->
     <footer>© 2025 ministredefense. Все права защищены. Сделано руками недоскриптера Sugar Kenshi.</footer>
 
     <script src="assets/js/index.js"></script>

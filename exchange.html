@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ministredefense</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/exchange.css">
     <link rel="icon" type="image/png" href="assets/icons/ico.png">
 </head>
@@ -13,10 +14,35 @@
         <div class="spinner"></div>
     </div>
 
-    <a href="index.html" class="home-btn" title="На главную">
-        <img src="assets/icons/home-light.png" alt="Домой (светлая тема)" class="home-icon light">
-        <img src="assets/icons/home-dark.png" alt="Домой (тёмная тема)" class="home-icon dark">
-    </a>
+    <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header"><h3>Меню</h3></div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Поиск разделов..." autocomplete="off">
+            <span class="search-icon">search</span>
+        </div>
+        <ul class="sidebar-menu" id="menuList">
+            <li data-title="Главная страница"><a href="index.html">Главная страница</a></li>
+            <li data-title="Следящие и министр"><a href="main.html">Важные лица</a></li>
+            <li data-title="Лидеры"><a href="leaders.html">Лидеры</a></li>
+            <li data-title="Старший состав"><a href="senior.html">Старший состав</a></li>
+            <li data-title="Система баллов"><a href="exchange.html">Система баллов</a></li>
+            <li data-title="Обмен баллов"><a href="points.html">Обмен баллов</a></li>
+            <li data-title="Проверки"><a href="database.html">Проверки военных баз</a></li>
+            <li data-title="Экзамены и контракты"><a href="exams.html">Экзамены и контракты</a></li>
+            <li data-title="Статистика военных"><a href="https://djoniohanter.com/military/" target="_blank">Статистика военных</a></li>
+            <li data-title="Выговоры"><a href="reprimands.html">Выговоры</a></li>
+            <li data-title="Черный список"><a href="blacklist.html">Черный список</a></li>
+            <li data-title="География баз"><a href="geography.html">География баз</a></li>
+            <li data-title="Игра"><a href="game.html">Игра</a></li>
+        </ul>
+        <div class="no-results" id="noResults">Ничего не найдено</div>
+    </nav>
+
+    <div class="overlay" id="overlay"></div>
 
     <h1>Жетоны: Получение и обмен</h1>
 

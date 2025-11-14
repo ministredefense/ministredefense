@@ -15,10 +15,35 @@
         <div class="spinner"></div>
     </div>
 
-    <a href="index.html" class="home-btn" title="На главную">
-        <img src="assets/icons/home-light.png" alt="Домой" class="home-icon light">
-        <img src="assets/icons/home-dark.png" alt="Домой" class="home-icon dark">
-    </a>
+    <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header"><h3>Меню</h3></div>
+        <div class="sidebar-search">
+            <input type="text" id="sidebarSearchInput" placeholder="Поиск разделов..." autocomplete="off">
+            <span class="search-icon">search</span>
+        </div>
+        <ul class="sidebar-menu" id="menuList">
+            <li data-title="Главная страница"><a href="index.html">Главная страница</a></li>
+            <li data-title="Следящие и министр"><a href="main.html">Важные лица</a></li>
+            <li data-title="Лидеры"><a href="leaders.html">Лидеры</a></li>
+            <li data-title="Старший состав"><a href="senior.html">Старший состав</a></li>
+            <li data-title="Система баллов"><a href="exchange.html">Система баллов</a></li>
+            <li data-title="Обмен баллов"><a href="points.html">Обмен баллов</a></li>
+            <li data-title="Проверки"><a href="database.html">Проверки военных баз</a></li>
+            <li data-title="Экзамены и контракты"><a href="exams.html">Экзамены и контракты</a></li>
+            <li data-title="Статистика военных"><a href="https://djoniohanter.com/military/" target="_blank">Статистика военных</a></li>
+            <li data-title="Выговоры"><a href="reprimands.html">Выговоры</a></li>
+            <li data-title="Черный список"><a href="blacklist.html">Черный список</a></li>
+            <li data-title="География баз"><a href="geography.html">География баз</a></li>
+            <li data-title="Игра"><a href="game.html">Игра</a></li>
+        </ul>
+        <div class="no-results" id="noResults">Ничего не найдено</div>
+    </nav>
+
+    <div class="overlay" id="overlay"></div>
 
     <label class="switch" title="Тёмная/Светлая тема">
         <input type="checkbox" id="themeSlider">
@@ -36,19 +61,26 @@
     </button>
 
     <div class="container">
-        <h1>Баллы сотрудников</h1>
-
-        <div class="search-container search-box">
-            <input type="text" id="searchInput" placeholder="Поиск по ID или никнейму..." autocomplete="off">
-            <span class="search-icon">search</span>
-        </div>
+        <h1>Статистика и количество баллов</h1>
 
         <div class="instructions">
             <strong>Информация:</strong><br>
-            • Система начисления баллов для Министерства Обороны, за опреденную работу.<br>
+            • Система начисления баллов для Министерства Обороны, за определённую работу.<br>
             • Баллы выдаются или снимаются старшими по званию.<br>
-            • Имеется топ по баллам и статистка, по кнопкам в правой нижней части экрана.<br>
+            • Имеется топ по баллам и статистика, по кнопкам в правой нижней части экрана.<br>
             • Данные обновляются в реальном времени.
+        </div>
+
+        <div class="base-filter">
+            <button class="base-btn active" data-base="all">Все</button>
+            <button class="base-btn" data-base="СВ">СВ</button>
+            <button class="base-btn" data-base="ВВС">ВВС</button>
+            <button class="base-btn" data-base="ВМФ">ВМФ</button>
+        </div>
+
+        <div class="search-container">
+            <span class="material-icons search-icon">search</span>
+            <input type="text" id="mainSearchInput" placeholder="Поиск по ID или никнейму..." autocomplete="off">
         </div>
 
         <div id="points"></div>
