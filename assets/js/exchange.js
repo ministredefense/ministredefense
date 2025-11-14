@@ -17,18 +17,32 @@ themeSlider.addEventListener('change', () => {
     setTheme(themeSlider.checked ? 'dark' : 'light');
 });
 
-const lightIcon = document.querySelector('.home-icon.light');
-const darkIcon = document.querySelector('.home-icon.dark');
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const searchInput = document.getElementById('searchInput');
+const menuList = document.getElementById('menuList');
+const menuItems = menuList.querySelectorAll('li');
+const noResults = document.getElementById('noResults');
 
-function updateHomeIcon() {
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    lightIcon.style.display = isDark ? 'none' : 'block';
-    darkIcon.style.display = isDark ? 'block' : 'none';
+function openSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    hamburger.classList.add('active');
+    searchInput.focus();
 }
-updateHomeIcon();
-
-const observer = new MutationObserver(updateHomeIcon);
-observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+function closeSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    hamburger.classList.remove('active');
+    searchInput.value = '';
+    filterMenu('');
+}
+hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', e => { 
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
+});
 
 document.querySelectorAll('.main-tab').forEach(tab => {
     tab.addEventListener('click', () => {

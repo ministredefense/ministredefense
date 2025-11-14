@@ -8,6 +8,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalBody = document.getElementById("modalBody");
     const modalClose = document.getElementById("modalClose");
 
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const searchInput = document.getElementById('searchInput');
+    const menuItems = document.querySelectorAll('.sidebar-menu li');
+    const noResults = document.getElementById('noResults');
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        hamburger.classList.add('active');
+        searchInput.focus();
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+        searchInput.value = '';
+        filterMenu('');
+    }
+    hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
+    });
+
+    searchInput.addEventListener('input', () => filterMenu(searchInput.value.trim().toLowerCase()));
+
+    function filterMenu(query) {
+        let found = 0;
+        menuItems.forEach(item => {
+            const text = item.getAttribute('data-title').toLowerCase();
+            const match = text.includes(query);
+            item.classList.toggle('hidden', !match);
+            if (match) found++;
+        });
+        noResults.classList.toggle('show', found === 0 && query);
+    }
+
     const themeSlider = document.getElementById('themeSlider');
     function setTheme(theme) {
         document.body.setAttribute('data-theme', theme);
@@ -15,23 +54,21 @@ document.addEventListener("DOMContentLoaded", () => {
         themeSlider.checked = (theme === 'dark');
     }
     setTheme(localStorage.getItem('theme') || 'light');
-    themeSlider.addEventListener('change', () => {
-        setTheme(themeSlider.checked ? 'dark' : 'light');
-    });
+    themeSlider.addEventListener('change', () => setTheme(themeSlider.checked ? 'dark' : 'light'));
 
-    modalClose.addEventListener("click", closeModal);
-    modal.addEventListener("click", e => e.target === modal && closeModal());
-    document.addEventListener("keydown", e => e.key === "Escape" && closeModal());
+    modalClose.addEventListener("click", () => modal.classList.remove("active"));
+    modal.addEventListener("click", e => e.target === modal && modal.classList.remove("active"));
 
     async function loadDatabase() {
         try {
             const res = await fetch(API_URL, { cache: "no-store" });
             const database = await res.json();
-            hideLoader();
             renderDatabase(database);
         } catch (err) {
             databaseList.innerHTML = `<div style="padding:20px; text-align:center; color:var(--danger);">Ошибка загрузки</div>`;
             console.error(err);
+        } finally {
+            setTimeout(() => loader.classList.add('hidden'), 300);
         }
     }
 
@@ -101,14 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         modal.classList.add("active");
-    }
-
-    function closeModal() {
-        modal.classList.remove("active");
-    }
-
-    function hideLoader() {
-        loader.style.display = "none";
     }
 
     function escape(str) {

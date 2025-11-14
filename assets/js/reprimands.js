@@ -23,6 +23,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTheme(themeSlider.checked ? 'dark' : 'light');
     });
 
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const searchInput = document.getElementById('searchInput');
+    const menuList = document.getElementById('menuList');
+    const menuItems = menuList.querySelectorAll('li');
+    const noResults = document.getElementById('noResults');
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        hamburger.classList.add('active');
+        searchInput.focus();
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+        searchInput.value = '';
+        filterMenu('');
+    }
+    hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => { 
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
+    });
+
     closeBtn.addEventListener('click', () => modal.classList.remove('active'));
     modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.classList.remove('active');
@@ -64,7 +91,7 @@ function createCard(item) {
     card.innerHTML = `
         <div class="card-nickname">${escapeHtml(item.nickname)}</div>
         <div class="card-base">База: <strong>${escapeHtml(fullBase)}</strong></div>
-        <div class="card-id">Номер аккаунта: ${escapeHtml(item.accountId)}</div>
+        <div class="card-id">ID: ${escapeHtml(item.accountId)}</div>
         <div class="card-count" style="margin-top: 8px;">
             <span style="color: ${badgeColor}; font-weight: 600;">
                 Выговоров: ${count}

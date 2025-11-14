@@ -5,8 +5,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     const blacklistContainer = document.getElementById('blacklist');
     const modal = document.getElementById('pointModal');
     const closeBtn = document.getElementById('modalClose');
-    const themeSlider = document.getElementById('themeSlider');
 
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const searchInput = document.getElementById('searchInput');
+    const menuItems = document.querySelectorAll('.sidebar-menu li');
+    const noResults = document.getElementById('noResults');
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        hamburger.classList.add('active');
+        searchInput.focus();
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+        searchInput.value = '';
+        filterMenu('');
+    }
+    hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
+    });
+
+    searchInput.addEventListener('input', () => filterMenu(searchInput.value.trim().toLowerCase()));
+
+    function filterMenu(query) {
+        let found = 0;
+        menuItems.forEach(item => {
+            const text = item.getAttribute('data-title').toLowerCase();
+            const match = text.includes(query);
+            item.classList.toggle('hidden', !match);
+            if (match) found++;
+        });
+        noResults.classList.toggle('show', found === 0 && query);
+    }
+
+    const themeSlider = document.getElementById('themeSlider');
     function setTheme(theme) {
         document.body.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
@@ -28,7 +67,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         data.sort((a, b) => new Date(b.dateIn) - new Date(a.dateIn));
-
         blacklistContainer.innerHTML = '';
         data.forEach(item => blacklistContainer.appendChild(createCard(item)));
 
@@ -48,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         card.innerHTML = `
             <div class="card-nickname">${escapeHtml(item.nickname)}</div>
-            <div class="card-id">Номер аккаунта: ${escapeHtml(item.accountId)}</div>
+            <div class="card-id">ID: ${escapeHtml(item.accountId)}</div>
             <div class="card-date">Попал: ${dateIn}</div>
             <div class="card-date">Выход: ${dateOut}</div>
             <div class="card-reason">${escapeHtml(item.reason)}</div>

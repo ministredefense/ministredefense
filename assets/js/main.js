@@ -17,6 +17,33 @@ themeSlider.addEventListener('change', () => {
     setTheme(themeSlider.checked ? 'dark' : 'light');
 });
 
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const searchInput = document.getElementById('searchInput');
+const menuList = document.getElementById('menuList');
+const menuItems = menuList.querySelectorAll('li');
+const noResults = document.getElementById('noResults');
+
+function openSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    hamburger.classList.add('active');
+    searchInput.focus();
+}
+function closeSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    hamburger.classList.remove('active');
+    searchInput.value = '';
+    filterMenu('');
+}
+hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', e => { 
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
+});
+
 const API_URL = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=main';
 const container = document.getElementById('adminContainer');
 const contentLoader = document.getElementById('contentLoader');
@@ -83,7 +110,7 @@ function createCard(person, type = 'admin') {
         <div class="admin-nick">${person.nickname}</div>
         <div class="admin-links">
             <a href="${vk}" target="_blank" class="admin-link vk ${!isValidLink(person.vk) ? 'disabled' : ''}" ${isValidLink(person.vk) ? 'rel="noopener"' : ''}>
-                <span class="material-icons">link</span> VK
+                <span class="material-icons">link</span> ВК
             </a>
             <a href="${forum}" target="_blank" class="admin-link forum ${!isValidLink(person.accountId) ? 'disabled' : ''}" ${isValidLink(person.accountId) ? 'rel="noopener"' : ''}>
                 <span class="material-icons">forum</span> Форум

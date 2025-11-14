@@ -1,3 +1,28 @@
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const menuList = document.getElementById('menuList');
+const menuItems = menuList.querySelectorAll('li');
+const noResults = document.getElementById('noResults');
+function openSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    hamburger.classList.add('active');
+    searchInput.focus();
+}
+function closeSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    hamburger.classList.remove('active');
+    searchInput.value = '';
+    filterMenu('');
+}
+hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
+});
+
 const API_STATS = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=exams';
 const API_PAGE = p => `https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=exams${p}`;
 

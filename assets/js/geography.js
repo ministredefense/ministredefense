@@ -76,6 +76,33 @@ function renderContent(target) {
     });
 }
 
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const searchInput = document.getElementById('searchInput');
+const menuList = document.getElementById('menuList');
+const menuItems = menuList.querySelectorAll('li');
+const noResults = document.getElementById('noResults');
+
+function openSidebar() {
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    hamburger.classList.add('active');
+    searchInput.focus();
+}
+function closeSidebar() {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    hamburger.classList.remove('active');
+    searchInput.value = '';
+    filterMenu('');
+}
+hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', e => { 
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
+});
+
 function wheelZoom(e, id) {
     e.preventDefault();
     const delta = e.deltaY < 0 ? 1.15 : 0.87;
@@ -155,23 +182,8 @@ function setTheme(theme) {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     themeSlider.checked = (theme === 'dark');
-    updateHomeIcon();
 }
 setTheme(localStorage.getItem('theme') || 'light');
 themeSlider.addEventListener('change', () => {
     setTheme(themeSlider.checked ? 'dark' : 'light');
 });
-
-function updateHomeIcon() {
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    const light = document.querySelector('.home-icon.light');
-    const dark = document.querySelector('.home-icon.dark');
-    if (light && dark) {
-        light.style.display = isDark ? 'none' : 'block';
-        dark.style.display = isDark ? 'block' : 'none';
-    }
-}
-updateHomeIcon();
-
-const observer = new MutationObserver(updateHomeIcon);
-observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });

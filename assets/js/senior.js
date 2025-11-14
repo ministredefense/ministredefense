@@ -23,6 +23,27 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.addEventListener("click", e => e.target === modal && closeModal());
     document.addEventListener("keydown", e => e.key === "Escape" && closeModal());
 
+    const sidebar = document.getElementById('sidebar');
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        hamburger.classList.add('active');
+        searchInput.focus();
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+        searchInput.value = '';
+        filterMenu('');
+    }
+    hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => { 
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
+    });
+
     async function loadData() {
         try {
             const res = await fetch(API_URL, { cache: "no-store" });
