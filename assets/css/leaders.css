@@ -558,7 +558,7 @@ footer {
     color: var(--font-color);
     transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
 }
-@media (max-width: 576px) {
+@media media (max-width: 768px) and (min-width: 577px) {
     .container {
         padding: 12px 12px;
     }
