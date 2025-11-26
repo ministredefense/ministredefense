@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", e => e.key === "Escape" && closeModal());
 
     const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('overlay');
+    const searchInput = document.getElementById('searchInput');
 
     function openSidebar() {
         sidebar.classList.add('active');
@@ -36,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.classList.remove('active');
         hamburger.classList.remove('active');
         searchInput.value = '';
-        filterMenu('');
     }
     hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
     overlay.addEventListener('click', closeSidebar);
@@ -74,14 +76,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             fraction.staff.forEach(member => {
                 const warnsCount = (member.warns || []).length;
-                const warnClass = warnsCount === 0 ? "warn-count zero" : "warn-count";
+                const points = member.points || "0";
+                const pointsText = points === "1" ? "балл" : ["2","3","4"].includes(points) ? "балла" : "баллов";
 
                 const card = document.createElement("div");
                 card.className = "staff-card";
 
                 card.innerHTML = `
                     <div class="staff-nickname">${escape(member.nickname)}</div>
-                    <div class="${warnClass}">${warnsCount}</div>
+                    <div class="card-footer">
+                        <div class="points-label">${points} ${pointsText}</div>
+                        <div class="warn-label ${warnsCount === 0 ? 'zero' : ''}">${warnsCount}</div>
+                    </div>
                     <a href="${member.vk || '#'}" class="vk-link" target="_blank" onclick="event.stopPropagation()">
                         <img class="vk-icon light" src="assets/icons/vk-light.png" alt="VK">
                         <img class="vk-icon dark" src="assets/icons/vk-dark.png" alt="VK">
