@@ -198,7 +198,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const date = new Date(e.date).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
                             const color = e.action === 'выдал' ? '#2ecc71' : '#e74c3c';
                             const sign = e.action === 'выдал' ? '+' : '-';
-                            return `<li style="margin:4px 0;"><span style="color:${color};font-weight:600;">${sign}${e.points}</span> — ${escapeHtml(e.rank)}, ${date}</li>`;
+                            const commentBlock = e.comment ? `<div class="history-comment">"${escapeHtml(e.comment)}"</div>` : '';
+                            return `<li style="margin:4px 0;">
+                                <span style="color:${color};font-weight:600;">${sign}${e.points}</span> — ${escapeHtml(e.rank)}, ${date}
+                                ${commentBlock}
+                            </li>`;
                         }).join('')}
                     </ul>
                 </div>
