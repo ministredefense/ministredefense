@@ -1,4 +1,3 @@
-
 const SENIOR_API_URL = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=senior';
 const POINTS_API_URL = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=points';
 
@@ -10,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
 
-
+    // --- Управление темой ---
     const themeSlider = document.getElementById('themeSlider');
     function setTheme(theme) {
         document.body.setAttribute('data-theme', theme);
@@ -22,27 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
         themeSlider.addEventListener('change', () => setTheme(themeSlider.checked ? 'dark' : 'light'));
     }
 
+    // --- Модальное окно ---
     modalClose.addEventListener("click", closeModal);
     modal.addEventListener("click", e => e.target === modal && closeModal());
     document.addEventListener("keydown", e => e.key === "Escape" && closeModal());
 
-    const sidebar = document.getElementById('sidebar');
-    const hamburger = document.getElementById('hamburger');
-    const overlay = document.getElementById('overlay');
-    
-    function openSidebar() {
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
-        hamburger.classList.add('active');
-    }
-    function closeSidebar() {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        hamburger.classList.remove('active');
-    }
-    hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
-    overlay.addEventListener('click', closeSidebar);
-
+    // --- Загрузка данных ---
     async function loadData() {
         try {
             const [seniorRes, pointsRes] = await Promise.all([
@@ -53,14 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const seniorData = await seniorRes.json();
             const pointsData = await pointsRes.json();
             
-            hideLoader();
+            if (loader) loader.style.display = "none";
             renderList(seniorData, pointsData);
         } catch (err) {
-            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка загрузки данных. Проверьте соединение.</div>`;
-            console.error("Ошибка API:", err);
+            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка связи с базой</div>`;
+            console.error(err);
         }
     }
 
+    // Правильное склонение
     function getPointsWord(num) {
         const n = Math.abs(num);
         const last = n % 10;
@@ -81,41 +66,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const title = document.createElement("div");
             title.className = "fraction-title";
-            title.textContent = escape(fraction.fraction);
+            title.textContent = fraction.fraction;
             block.appendChild(title);
 
             const grid = document.createElement("div");
             grid.className = "staff-grid";
 
             fraction.staff.forEach(member => {
-                const warnsCount = (member.warns || []).length;
-                
-                let calculatedPoints = 0;
-                const targetNick = member.nickname.trim().toLowerCase();
+                // СЧИТАЕМ БАЛЛЫ С НУЛЯ ПО ИСТОРИИ
+                let totalPoints = 0;
+                const memberNick = member.nickname.trim().toLowerCase();
 
                 if (Array.isArray(pointsData)) {
                     pointsData.forEach(entry => {
+                        // Проверяем, совпадает ли ник в записи истории с ником в карточке
                         const entryNick = (entry.nickname || entry.name || entry['Никнейм'] || "").trim().toLowerCase();
                         
-                        if (entryNick === targetNick) {
+                        if (entryNick === memberNick) {
                             const pts = parseInt(entry.points || entry['Баллы'] || 0);
                             const action = String(entry.action || entry['Действие'] || "").trim().toLowerCase();
                             
                             if (action === "выдал") {
-                                calculatedPoints += pts;
+                                totalPoints += pts;
                             } else if (action === "снял") {
-                                calculatedPoints -= pts;
+                                totalPoints -= pts;
                             }
                         }
                     });
                 }
 
+                const warnsCount = (member.warns || []).length;
                 const card = document.createElement("div");
                 card.className = "staff-card";
                 card.innerHTML = `
-                    <div class="staff-nickname">${escape(member.nickname)}</div>
+                    <div class="staff-nickname">${member.nickname}</div>
                     <div class="card-footer">
-                        <div class="points-label">${calculatedPoints} ${getPointsWord(calculatedPoints)}</div>
+                        <div class="points-label">${totalPoints} ${getPointsWord(totalPoints)}</div>
                         <div class="warn-label ${warnsCount === 0 ? 'zero' : ''}">${warnsCount}</div>
                     </div>
                     <a href="${member.vk || '#'}" class="vk-link" target="_blank" onclick="event.stopPropagation()">
@@ -136,38 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function openModal(member) {
         modalTitle.textContent = member.nickname;
         const warns = member.warns || [];
-        const warnsHTML = warns.length === 0
-            ? '<div class="warn-no-warns">Выговоров нет</div>'
-            : warns.map(w => `
-                <div class="warn-item">
-                    <div class="warn-text">${escape(w.text)}</div>
-                    <div class="warn-proof">
-                        ${w.proof && w.proof.includes('http') 
-                            ? `<a href="${escape(w.proof)}" target="_blank">${escape(w.proof)}</a>` 
-                            : escape(w.proof)}
-                    </div>
-                </div>
-            `).join('');
-
         modalBody.innerHTML = `
-            <strong style="display:block; margin:20px 0 12px; font-size:15px; color:var(--color-primary);">Список выговоров:</strong>
-            ${warnsHTML}
+            <strong style="display:block; margin:20px 0 12px; font-size:15px; color:var(--color-primary);">Выговоры:</strong>
+            ${warns.length === 0 ? '<div class="warn-no-warns">Чист</div>' : warns.map(w => `
+                <div class="warn-item">
+                    <div class="warn-text">${w.text}</div>
+                    <div class="warn-proof"><a href="${w.proof}" target="_blank">${w.proof}</a></div>
+                </div>
+            `).join('')}
         `;
         modal.classList.add("active");
     }
 
-    function closeModal() {
-        modal.classList.remove("active");
-    }
-
-    function hideLoader() {
-        if (loader) loader.style.display = "none";
-    }
-
-    function escape(s) {
-        if (!s) return "—";
-        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
+    function closeModal() { modal.classList.remove("active"); }
 
     loadData();
 });
