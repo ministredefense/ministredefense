@@ -9,26 +9,57 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
 
-    // --- Управление темой ---
     const themeSlider = document.getElementById('themeSlider');
     function setTheme(theme) {
         document.body.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
-        if (themeSlider) themeSlider.checked = (theme === 'dark');
+        themeSlider.checked = (theme === 'dark');
     }
     setTheme(localStorage.getItem('theme') || 'light');
-    if (themeSlider) {
-        themeSlider.addEventListener('change', () => setTheme(themeSlider.checked ? 'dark' : 'light'));
-    }
+    themeSlider.addEventListener('change', () => {
+        setTheme(themeSlider.checked ? 'dark' : 'light');
+    });
 
-    // --- Модальное окно ---
     modalClose.addEventListener("click", closeModal);
     modal.addEventListener("click", e => e.target === modal && closeModal());
     document.addEventListener("keydown", e => e.key === "Escape" && closeModal());
 
-    // --- Загрузка данных ---
+    const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('overlay');
+    const searchInput = document.getElementById('searchInput');
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        hamburger.classList.add('active');
+        searchInput.focus();
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+        searchInput.value = '';
+    }
+    hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', e => { 
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
+    });
+
+    // Функция для правильного склонения слова "балл"
+    function declOfNum(n, text_forms) {
+        n = Math.abs(n) % 100;
+        const n1 = n % 10;
+        if (n > 10 && n < 20) { return text_forms[2]; }
+        if (n1 > 1 && n1 < 5) { return text_forms[1]; }
+        if (n1 === 1) { return text_forms[0]; }
+        return text_forms[2];
+    }
+
     async function loadData() {
         try {
+            // Запрашиваем обе базы данных одновременно
             const [seniorRes, pointsRes] = await Promise.all([
                 fetch(SENIOR_API_URL, { cache: "no-store" }),
                 fetch(POINTS_API_URL, { cache: "no-store" })
@@ -36,72 +67,82 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const seniorData = await seniorRes.json();
             const pointsData = await pointsRes.json();
-            
-            if (loader) loader.style.display = "none";
-            renderList(seniorData, pointsData);
+
+            // Создаем карту баллов для быстрого поиска по никнейму
+            const pointsMap = new Map();
+            if (Array.isArray(pointsData)) {
+                pointsData.forEach(user => {
+                    let totalPoints = 0;
+                    
+                    // Считаем баллы (выдал - снял) по всем базам игрока
+                    Object.values(user.bases || {}).forEach(entries => {
+                        entries.forEach(e => {
+                            const pts = parseInt(e.points) || 0;
+                            if (e.action === 'выдал') {
+                                totalPoints += pts;
+                            } else {
+                                totalPoints -= pts;
+                            }
+                        });
+                    });
+
+                    // Привязываем результат ко всем известным никнеймам игрока
+                    (user.nicknames || []).forEach(nick => {
+                        pointsMap.set(nick.toLowerCase(), totalPoints);
+                    });
+                });
+            }
+
+            // Обновляем данные старшего состава приоритетными значениями из points
+            if (Array.isArray(seniorData)) {
+                seniorData.forEach(fraction => {
+                    fraction.staff.forEach(member => {
+                        const nickLower = member.nickname.toLowerCase();
+                        if (pointsMap.has(nickLower)) {
+                            member.points = pointsMap.get(nickLower); // Приоритет из points
+                        } else {
+                            member.points = parseInt(member.points) || 0; // Резервный вариант
+                        }
+                    });
+                });
+            }
+
+            hideLoader();
+            renderList(seniorData);
         } catch (err) {
-            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка связи с базой</div>`;
+            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка загрузки данных</div>`;
             console.error(err);
         }
     }
 
-    // Правильное склонение
-    function getPointsWord(num) {
-        const n = Math.abs(num);
-        const last = n % 10;
-        const lastTwo = n % 100;
-        if (lastTwo >= 11 && lastTwo <= 19) return "баллов";
-        if (last === 1) return "балл";
-        if (last >= 2 && last <= 4) return "балла";
-        return "баллов";
-    }
-
-    function renderList(seniorData, pointsData) {
-        if (!Array.isArray(seniorData)) return;
+    function renderList(data) {
+        if (!Array.isArray(data)) return;
         list.innerHTML = "";
 
-        seniorData.forEach(fraction => {
+        data.forEach(fraction => {
             const block = document.createElement("div");
             block.className = "fraction-block";
 
             const title = document.createElement("div");
             title.className = "fraction-title";
-            title.textContent = fraction.fraction;
+            title.textContent = escape(fraction.fraction);
             block.appendChild(title);
 
             const grid = document.createElement("div");
             grid.className = "staff-grid";
 
             fraction.staff.forEach(member => {
-                // СЧИТАЕМ БАЛЛЫ С НУЛЯ ПО ИСТОРИИ
-                let totalPoints = 0;
-                const memberNick = member.nickname.trim().toLowerCase();
-
-                if (Array.isArray(pointsData)) {
-                    pointsData.forEach(entry => {
-                        // Проверяем, совпадает ли ник в записи истории с ником в карточке
-                        const entryNick = (entry.nickname || entry.name || entry['Никнейм'] || "").trim().toLowerCase();
-                        
-                        if (entryNick === memberNick) {
-                            const pts = parseInt(entry.points || entry['Баллы'] || 0);
-                            const action = String(entry.action || entry['Действие'] || "").trim().toLowerCase();
-                            
-                            if (action === "выдал") {
-                                totalPoints += pts;
-                            } else if (action === "снял") {
-                                totalPoints -= pts;
-                            }
-                        }
-                    });
-                }
-
                 const warnsCount = (member.warns || []).length;
+                const points = member.points || 0;
+                const pointsText = declOfNum(points, ["балл", "балла", "баллов"]);
+
                 const card = document.createElement("div");
                 card.className = "staff-card";
+
                 card.innerHTML = `
-                    <div class="staff-nickname">${member.nickname}</div>
+                    <div class="staff-nickname">${escape(member.nickname)}</div>
                     <div class="card-footer">
-                        <div class="points-label">${totalPoints} ${getPointsWord(totalPoints)}</div>
+                        <div class="points-label">${points} ${pointsText}</div>
                         <div class="warn-label ${warnsCount === 0 ? 'zero' : ''}">${warnsCount}</div>
                     </div>
                     <a href="${member.vk || '#'}" class="vk-link" target="_blank" onclick="event.stopPropagation()">
@@ -121,20 +162,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openModal(member) {
         modalTitle.textContent = member.nickname;
+
         const warns = member.warns || [];
+        const warnsHTML = warns.length === 0
+            ? '<div class="warn-no-warns">Выговоров нет</div>'
+            : warns.map(w => `
+                <div class="warn-item">
+                    <div class="warn-text">${escape(w.text)}</div>
+                    <div class="warn-proof">
+                        ${w.proof && w.proof.includes('<') 
+                            ? w.proof 
+                            : `<a href="${escape(w.proof)}" target="_blank">${escape(w.proof)}</a>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+
         modalBody.innerHTML = `
             <strong style="display:block; margin:20px 0 12px; font-size:15px; color:var(--color-primary);">Выговоры:</strong>
-            ${warns.length === 0 ? '<div class="warn-no-warns">Чист</div>' : warns.map(w => `
-                <div class="warn-item">
-                    <div class="warn-text">${w.text}</div>
-                    <div class="warn-proof"><a href="${w.proof}" target="_blank">${w.proof}</a></div>
-                </div>
-            `).join('')}
+            ${warnsHTML}
         `;
         modal.classList.add("active");
     }
 
-    function closeModal() { modal.classList.remove("active"); }
+    function closeModal() {
+        modal.classList.remove("active");
+    }
+
+    function hideLoader() {
+        loader.style.display = "none";
+    }
+
+    function escape(s) {
+        if (!s) return "—";
+        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
 
     loadData();
 });
