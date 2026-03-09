@@ -1,3 +1,4 @@
+
 const SENIOR_API_URL = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=senior';
 const POINTS_API_URL = 'https://script.google.com/macros/s/AKfycby82GxZMeF8BRrKnJQM5dCY-1il6kc0I935eK79Eo7Ne4pbUmCEgBheSQIM6wGSbBYSzQ/exec?type=points';
 
@@ -9,16 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalTitle = document.getElementById("modalTitle");
     const modalBody = document.getElementById("modalBody");
 
+
     const themeSlider = document.getElementById('themeSlider');
     function setTheme(theme) {
         document.body.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
-        themeSlider.checked = (theme === 'dark');
+        if (themeSlider) themeSlider.checked = (theme === 'dark');
     }
     setTheme(localStorage.getItem('theme') || 'light');
-    themeSlider.addEventListener('change', () => {
-        setTheme(themeSlider.checked ? 'dark' : 'light');
-    });
+    if (themeSlider) {
+        themeSlider.addEventListener('change', () => setTheme(themeSlider.checked ? 'dark' : 'light'));
+    }
 
     modalClose.addEventListener("click", closeModal);
     modal.addEventListener("click", e => e.target === modal && closeModal());
@@ -27,25 +29,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById('sidebar');
     const hamburger = document.getElementById('hamburger');
     const overlay = document.getElementById('overlay');
-    const searchInput = document.getElementById('searchInput');
-
+    
     function openSidebar() {
         sidebar.classList.add('active');
         overlay.classList.add('active');
         hamburger.classList.add('active');
-        searchInput.focus();
     }
     function closeSidebar() {
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
         hamburger.classList.remove('active');
-        searchInput.value = '';
     }
     hamburger.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
     overlay.addEventListener('click', closeSidebar);
-    document.addEventListener('keydown', e => { 
-        if (e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar(); 
-    });
 
     async function loadData() {
         try {
@@ -60,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
             hideLoader();
             renderList(seniorData, pointsData);
         } catch (err) {
-            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка загрузки данных</div>`;
-            console.error(err);
+            list.innerHTML = `<div style="padding:18px; text-align:center; color:#e74c3c;">Ошибка загрузки данных. Проверьте соединение.</div>`;
+            console.error("Ошибка API:", err);
         }
     }
 
@@ -95,34 +91,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 const warnsCount = (member.warns || []).length;
                 
                 let calculatedPoints = 0;
-                
-                if (Array.isArray(pointsData)) {
-                    const pointUser = pointsData.find(u => 
-                        (u.nicknames || []).some(n => n.trim().toLowerCase() === member.nickname.trim().toLowerCase())
-                    );
-                    if (pointUser && pointUser.bases) {
-                        Object.values(pointUser.bases).forEach(entries => {
-                            entries.forEach(e => {
-                                const pts = parseInt(e.points) || 0;
-                                if (e.action === 'выдал') {
-                                    calculatedPoints += pts;
-                                } else {
-                                    calculatedPoints -= pts;
-                                }
-                            });
-                        });
-                    }
-                }
+                const targetNick = member.nickname.trim().toLowerCase();
 
-                const pointsText = getPointsWord(calculatedPoints);
+                if (Array.isArray(pointsData)) {
+                    pointsData.forEach(entry => {
+                        const entryNick = (entry.nickname || entry.name || entry['Никнейм'] || "").trim().toLowerCase();
+                        
+                        if (entryNick === targetNick) {
+                            const pts = parseInt(entry.points || entry['Баллы'] || 0);
+                            const action = String(entry.action || entry['Действие'] || "").trim().toLowerCase();
+                            
+                            if (action === "выдал") {
+                                calculatedPoints += pts;
+                            } else if (action === "снял") {
+                                calculatedPoints -= pts;
+                            }
+                        }
+                    });
+                }
 
                 const card = document.createElement("div");
                 card.className = "staff-card";
-
                 card.innerHTML = `
                     <div class="staff-nickname">${escape(member.nickname)}</div>
                     <div class="card-footer">
-                        <div class="points-label">${calculatedPoints} ${pointsText}</div>
+                        <div class="points-label">${calculatedPoints} ${getPointsWord(calculatedPoints)}</div>
                         <div class="warn-label ${warnsCount === 0 ? 'zero' : ''}">${warnsCount}</div>
                     </div>
                     <a href="${member.vk || '#'}" class="vk-link" target="_blank" onclick="event.stopPropagation()">
@@ -142,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openModal(member) {
         modalTitle.textContent = member.nickname;
-
         const warns = member.warns || [];
         const warnsHTML = warns.length === 0
             ? '<div class="warn-no-warns">Выговоров нет</div>'
@@ -150,16 +142,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="warn-item">
                     <div class="warn-text">${escape(w.text)}</div>
                     <div class="warn-proof">
-                        ${w.proof && w.proof.includes('<') 
-                            ? w.proof 
-                            : `<a href="${escape(w.proof)}" target="_blank">${escape(w.proof)}</a>`
-                        }
+                        ${w.proof && w.proof.includes('http') 
+                            ? `<a href="${escape(w.proof)}" target="_blank">${escape(w.proof)}</a>` 
+                            : escape(w.proof)}
                     </div>
                 </div>
             `).join('');
 
         modalBody.innerHTML = `
-            <strong style="display:block; margin:20px 0 12px; font-size:15px; color:var(--color-primary);">Выговоры:</strong>
+            <strong style="display:block; margin:20px 0 12px; font-size:15px; color:var(--color-primary);">Список выговоров:</strong>
             ${warnsHTML}
         `;
         modal.classList.add("active");
@@ -170,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function hideLoader() {
-        loader.style.display = "none";
+        if (loader) loader.style.display = "none";
     }
 
     function escape(s) {
