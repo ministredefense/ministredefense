@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 totalPoints += b.points; totalEarned += b.earned; totalSpent += b.spent;
             });
 
-            return { ...user, basesMap, totalPoints, totalEarned, totalSpent };
+            return { ...user, nicknames: user.nicknames || [], basesMap, totalPoints, totalEarned, totalSpent };
         });
 
         filterUsers('');
